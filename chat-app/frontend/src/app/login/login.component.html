@@ -1,0 +1,80 @@
+
+<div class="login-wrapper">
+    <div class="login-contrainer">
+        <h1>Chat Room</h1>
+        <input type="text" [(ngModel)]="username" placeholder="Username" class="login-input">
+        <input type="password" [(ngModel)]="password" placeholder="Password" class="login-input">
+        <button  (click)="login()" type="submit" class="login-btn">Login</button>
+        <div class="login-link">
+            don't have an account? <a routerLink="/register">Register</a>
+        </div>
+    </div>
+</div>
+  
+<style>
+.login-wrapper {
+    width: 100%;
+    height: 100%;
+    background: rgb(164, 165, 208);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-contrainer {
+    width: 300px;
+    padding: 50px;
+    background: rgba(190, 182, 182, 0.562);
+    border-radius: 10px;
+    box-shadow: 0 32px 64px rgb(0 0 0 / 20%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-input {
+    display: block;
+    margin: auto;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 25px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+    font-size: 15px;
+    width: 250px;
+    outline: none;
+    margin-top: 25px;
+}
+
+.login-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 75px;
+  margin-top: 50px;
+}
+
+.login-btn:hover {
+  background: rgb(164, 165, 208);
+  color: white;
+}
+
+.login-link {
+    margin-top: 20px;
+}
+
+.login-link a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    opacity: 0.5;
+}
+</style>

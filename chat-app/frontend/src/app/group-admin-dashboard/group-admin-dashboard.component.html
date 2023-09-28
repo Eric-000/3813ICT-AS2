@@ -1,0 +1,164 @@
+<div class="dashboard-wrapper">
+    <h1 class="white">
+        Welcome to the Super Group Dashboard!
+    </h1>
+    <div class="modules-wrapper">
+        <!-- Return to Chat Room -->
+        <div class="module-card" routerLink="/chat">
+            <i class="fas fa-arrow-left"></i>
+            <h3>Return to Chat Room</h3>
+        </div>
+
+        <!-- Create Groups -->
+        <div class="module-card" (click)="createGroupFunction()">
+            <i class="fas fa-users"></i>
+            <h3>Create Group</h3>
+        </div>
+
+        <!-- Create Channels -->
+        <div class="module-card" onclick="createChannelFunction()">
+            <i class="fas fa-hashtag"></i>
+            <h3>Create Channel</h3>
+        </div>
+
+        <!-- Remove Entities -->
+        <div class="module-card" onclick="removeEntitiesFunction()">
+            <i class="fas fa-minus-circle"></i>
+            <h3>Remove Group/Channel/User</h3>
+        </div>
+
+        <!-- Delete Chat User -->
+        <div class="module-card" onclick="deleteChatUserFunction()">
+            <i class="fas fa-user-times"></i>
+            <h3>Delete Chat User</h3>
+        </div>
+
+        <!-- Modify/Delete Group -->
+        <div class="module-card" onclick="modifyDeleteGroupFunction()">
+            <i class="fas fa-tools"></i>
+            <h3>Modify/Delete Created Group</h3>
+        </div>
+
+        <!-- Ban and Report -->
+        <div class="module-card" onclick="banReportFunction()">
+            <i class="fas fa-ban"></i>
+            <h3>Ban & Report</h3>
+            <p>Ban a user and report to super admins.</p>
+        </div>
+
+        <!-- Group Creation Modal -->
+        <div id="createGroupModal" class="modal">
+            <div class="modal-container">
+                <div class="modal-content">
+                    <h2>Create Group</h2>
+                    <form (submit)="onCreateGroup()">
+                        <div class="input-group">
+                            <label for="groupName">Group Name</label>
+                            <input type="text" name="groupName" id="groupName" [(ngModel)]="newGroupName">
+                        </div>
+                        <button type="submit" class="modal-btn">Create</button>
+                    </form>
+                    <button (click)="closeCreateGroupModal()" class="modal-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: rgb(164, 165, 208);
+}
+
+.white {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.modules-wrapper {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    width: 100%;
+    max-width: 1000px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.module-card:hover {
+    background-color: rgb(225, 225, 240);
+}
+
+.module-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-card h3 {
+    margin: 1rem 0;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.input-group {
+    padding: 20px;
+}
+
+.modal-btn {
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: bisque;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group > *:not(:last-child) {
+    margin-bottom: 10px;
+}
+</style>
+

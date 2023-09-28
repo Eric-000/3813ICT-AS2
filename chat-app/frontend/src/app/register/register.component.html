@@ -1,0 +1,78 @@
+
+<div class="register-wrapper">
+    <div class="register-contrainer">
+        <h1>Register</h1>
+        <input type="text" [(ngModel)]="email" placeholder="Email" class="register-input">
+        <input type="text" [(ngModel)]="username" placeholder="Username" class="register-input">
+        <input type="password" [(ngModel)]="password" placeholder="Password" class="register-input">
+        <input type="password" [(ngModel)]="confirmPassword" placeholder="Confirm Password" class="register-input">
+        <button  (click)="onRegister()" type="submit" class="register-btn">Register</button>
+        <!-- add link back to login -->
+        <a routerLink="/login">Already have an account? Login</a>
+    </div>
+</div>
+  
+<style>
+.register-wrapper {
+    width: 100%;
+    height: 100%;
+    background: rgb(164, 165, 208);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-contrainer {
+    width: 300px;
+    padding: 50px;
+    background: rgba(190, 182, 182, 0.562);
+    border-radius: 10px;
+    box-shadow: 0 32px 64px rgb(0 0 0 / 20%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-input {
+    display: block;
+    margin: auto;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 25px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+    font-size: 15px;
+    width: 250px;
+    outline: none;
+    margin-top: 25px;
+}
+
+.register-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 75px;
+  margin-top: 35px;
+}
+
+.register-btn:hover {
+  background: rgb(164, 165, 208);
+  color: white;
+}
+
+.register-contrainer a {
+    margin-top: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.register-contrainer a:hover {
+    opacity: 0.5;
+}
+</style>

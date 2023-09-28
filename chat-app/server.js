@@ -4,6 +4,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const groupRoutes = require('./routes/groupRoutes');
+const channelRoutes = require('./routes/channelRoutes');
 const http = require('http');
 const configureSocket = require('./socket');
 
@@ -26,6 +27,8 @@ app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/roles', roleRoutes);
 app.use('/groups', groupRoutes);
+app.use('/channels', channelRoutes);
+
 
 server.listen(3000, () => {
   console.log('Server is up on port 3000.');

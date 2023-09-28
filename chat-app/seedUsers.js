@@ -19,9 +19,9 @@ const seedDatabase = async () => {
   const hashedPassword = await bcrypt.hash('password123', 8);
 
   // Create Users
-  const superAdminUser = new User({ username: 'superAdmin', password: hashedPassword, roles: [superAdminRole._id] });
-  const groupAdminUser = new User({ username: 'groupAdmin', password: hashedPassword, roles: [groupAdminRole._id] });
-  const normalUser = new User({ username: 'normalUser', password: hashedPassword, roles: [userRole._id] });
+  const superAdminUser = new User({ username: 'superAdmin', email:'super@s.com', password: hashedPassword, roles: [superAdminRole._id] });
+  const groupAdminUser = new User({ username: 'groupAdmin',email:'group@g.com', password: hashedPassword, roles: [groupAdminRole._id] });
+  const normalUser = new User({ username: 'normalUser',email:'user@u.com', password: hashedPassword, roles: [userRole._id] });
 
   await superAdminUser.save();
   await groupAdminUser.save();

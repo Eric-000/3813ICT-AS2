@@ -1,0 +1,76 @@
+<div class="dashboard-wrapper">
+    <h1 class="white">
+        User Dashboard!
+    </h1>
+    <div class="modules-wrapper">
+        <!-- Return to Chat Room -->
+        <div class="module-card" routerLink="/chat">
+            <i class="fas fa-arrow-left"></i>
+            <h3>Return to Chat Room</h3>
+        </div>
+        
+        <!-- Delete Account -->
+        <div class="module-card">
+            <i class="fas fa-user-times"></i>
+            <h3>Delete Account</h3>
+            <p>Remove yourself from the chat platform.</p>
+        </div>
+
+        <!-- Leave Group(s) -->
+        <div class="module-card">
+            <i class="fas fa-sign-out-alt"></i>
+            <h3>Leave Group(s)</h3>
+            <p>Exit from a group or groups you belong to.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: rgb(164, 165, 208);
+}
+
+.white {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.modules-wrapper {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    width: 100%;
+    max-width: 800px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.module-card:hover {
+    background-color: rgb(225, 225, 240);
+}
+
+.module-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-card h3 {
+    margin: 1rem 0;
+}
+</style>
+

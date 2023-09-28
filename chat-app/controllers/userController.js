@@ -36,19 +36,41 @@ const register = async (req, res) => {
 
   await user.save();
 
+  const userWithExtraInfo = user.populate('roles')
+  .populate({
+    path: 'groups',
+    populate: {
+      path: 'channels'
+    }
+  });
+
   // generate jwt
   const token = jwt.sign({ id: user.id }, 'secretKey', {
     expiresIn: '1h',
   });
 
-  res.status(201).send({ token });
+  const userObj = userWithExtraInfo.toObject();
+  delete userObj.password;
+
+  res.status(201).send({
+    token,
+    user: userObj
+  });
 };
 
 const login = async (req, res) => {
   const { username, password } = req.body;
 
   // check user existed
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username })
+    .populate('roles')
+    .populate({
+      path: 'groups',
+      populate: {
+        path: 'channels'
+      }
+  });
+
   if (!user) {
     return res.status(400).send('User not found.');
   }
@@ -63,8 +85,14 @@ const login = async (req, res) => {
   const token = jwt.sign({ id: user.id }, 'secretKey', {
     expiresIn: '1h',
   });
-
-  res.status(200).send({ token });
+  
+  const userObj = user.toObject();
+  delete userObj.password;
+  
+  res.status(200).send({
+    token,
+    user: userObj
+  });
 };
 
 module.exports = {

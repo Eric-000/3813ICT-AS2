@@ -1,0 +1,93 @@
+<div class="dashboard-wrapper">
+    <h1 class="white">
+        Super Admin Dashboard
+    </h1>
+    <div class="modules-wrapper">
+        <!-- Return to Chat Room -->
+        <div class="module-card" routerLink="/chat">
+            <i class="fas fa-arrow-left"></i>
+            <h3>Return to Chat Room</h3>
+        </div>
+
+        <!-- Promote to Group Admin -->
+        <div class="module-card" onclick="promoteToGroupAdminFunction()">
+            <i class="fas fa-user-plus"></i>
+            <h3>Promote to Group Admin</h3>
+            <p>Upgrade a chat user to the Group Admin role.</p>
+        </div>
+
+        <!-- Remove Chat User -->
+        <div class="module-card" onclick="removeChatUserFunction()">
+            <i class="fas fa-user-minus"></i>
+            <h3>Remove Chat User</h3>
+            <p>Remove any chat user from the system.</p>
+        </div>
+
+        <!-- Upgrade to Super Admin -->
+        <div class="module-card" onclick="upgradeToSuperAdminFunction()">
+            <i class="fas fa-crown"></i>
+            <h3>Upgrade to Super Admin</h3>
+            <p>Make a chat user a Super Admin.</p>
+        </div>
+
+        <!-- Group Admin Functions -->
+        <div class="module-card" onclick="groupAdminFunctionsAccess()">
+            <i class="fas fa-users-cog"></i>
+            <h3>Group Admin Functions</h3>
+            <p>Access all functions of a group administrator.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: rgb(164, 165, 208);
+}
+
+.white {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.modules-wrapper {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    width: 100%;
+    max-width: 1000px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.module-card:hover {
+    background-color: rgb(225, 225, 240);
+}
+
+.module-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-card h3 {
+    margin: 1rem 0;
+}
+
+.module-card p {
+    text-align: center;
+}
+</style>

@@ -13,6 +13,16 @@ const createGroup = async (req, res) => {
   res.status(201).send({ groupId: group.id });
 };
 
+const getGroups = async (req, res) => {
+  try {
+    const groups = await Group.find();
+    res.status(200).send(groups);
+  } catch (error) {
+    console.error('Error fetching groups:', error);
+    res.status(500).send('Server error');
+  }
+};
+
 const assignGroup = async (req, res) => {
   const { userId, groupId } = req.body;
 
@@ -38,4 +48,5 @@ const assignGroup = async (req, res) => {
 module.exports = {
   createGroup,
   assignGroup,
+  getGroups
 };
