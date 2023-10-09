@@ -1,0 +1,51 @@
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: rgb(164, 165, 208);
+}
+
+.white {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.modules-wrapper {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    width: 100%;
+    max-width: 1000px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.module-card:hover {
+    background-color: rgb(225, 225, 240);
+}
+
+.module-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-card h3 {
+    margin: 1rem 0;
+}
+
+.module-card p {
+    text-align: center;
+}
+
