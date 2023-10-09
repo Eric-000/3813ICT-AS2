@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { GroupAdminDashboardComponent } from './group-admin-dashboard/group-admin-dashboard.component';
 import { SuperAdminDashboardComponent } from './super-admin-dashboard/super-admin-dashboard.component';
+import { VideoRoomComponent } from './video-room/video-room.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SuperAdminDashboardComponent } from './super-admin-dashboard/super-admi
     RegisterComponent,
     UserDashboardComponent,
     GroupAdminDashboardComponent,
-    SuperAdminDashboardComponent
+    SuperAdminDashboardComponent,
+    VideoRoomComponent
   ],
   imports: [
     FormsModule,

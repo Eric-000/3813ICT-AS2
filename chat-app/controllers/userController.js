@@ -36,13 +36,15 @@ const register = async (req, res) => {
 
   await user.save();
 
-  const userWithExtraInfo = user.populate('roles')
-  .populate({
-    path: 'groups',
-    populate: {
-      path: 'channels'
-    }
-  });
+  const userWithExtraInfo = await User.findById(user._id)
+      .populate('roles')
+      .populate({
+        path: 'groups',
+        populate: {
+            path: 'channels'
+        }
+      });
+
 
   // generate jwt
   const token = jwt.sign({ id: user.id }, 'secretKey', {
@@ -54,7 +56,7 @@ const register = async (req, res) => {
 
   res.status(201).send({
     token,
-    user: userObj
+    user: userWithExtraInfo
   });
 };
 
@@ -70,7 +72,7 @@ const login = async (req, res) => {
         path: 'channels'
       }
   });
-
+  
   if (!user) {
     return res.status(400).send('User not found.');
   }
@@ -83,9 +85,9 @@ const login = async (req, res) => {
 
   // generate jwt
   const token = jwt.sign({ id: user.id }, 'secretKey', {
-    expiresIn: '1h',
+    expiresIn: '10h',
   });
-  
+
   const userObj = user.toObject();
   delete userObj.password;
   
@@ -95,7 +97,25 @@ const login = async (req, res) => {
   });
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const userRole = await Role.findOne({ name: 'User' });
+    if (!userRole) {
+      return res.status(400).send('User role not found.');
+    }
+
+    const users = await User.find({ roles: userRole._id })
+                            .select('-password');
+    res.status(200).send(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   register,
   login,
+  getUsers
 };

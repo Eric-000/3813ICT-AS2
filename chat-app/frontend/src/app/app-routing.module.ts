@@ -6,6 +6,7 @@ import { ChatDashboardComponent } from './chat-dashboard/chat-dashboard.componen
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { GroupAdminDashboardComponent } from './group-admin-dashboard/group-admin-dashboard.component';
 import { SuperAdminDashboardComponent } from './super-admin-dashboard/super-admin-dashboard.component';
+import { VideoRoomComponent } from './video-room/video-room.component';
 
 
 
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'chat', component: ChatDashboardComponent },
   { path: 'user', component: UserDashboardComponent },
   { path: 'groupAdmin', component: GroupAdminDashboardComponent },
-  { path: 'superAdmin', component: SuperAdminDashboardComponent }
+  { path: 'superAdmin', component: SuperAdminDashboardComponent },
+  { path: 'video-room/:roomId', component: VideoRoomComponent }
 ];
 
 @NgModule({

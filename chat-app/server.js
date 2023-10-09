@@ -7,6 +7,7 @@ const groupRoutes = require('./routes/groupRoutes');
 const channelRoutes = require('./routes/channelRoutes');
 const http = require('http');
 const configureSocket = require('./socket');
+const { ExpressPeerServer } = require('peer');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,13 @@ const server = http.createServer(app);
 // socket configuration
 configureSocket(server);
 
+// PeerServer configuration
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+  path: '/myapp'
+});
+
+app.use('/peerjs', peerServer);
 app.use(express.json());
 
 // routes

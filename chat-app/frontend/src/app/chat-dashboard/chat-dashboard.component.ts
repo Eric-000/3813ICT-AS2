@@ -2,11 +2,42 @@ import { Component } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Router } from '@angular/router';
 
+type Channel = {
+  _id: string;
+  name: string;
+  __v?: number;
+};
+
+type Group = {
+  _id: string;
+  name: string;
+  channels: Channel[];
+  createdBy: string;
+  __v?: number;
+};
+
+type Role = {
+  _id: string;
+  name: string;
+  permissions: string[];
+  __v?: number;
+};
+
+type User = {
+  _id: string;
+  username: string;
+  email?: string;
+  roles?: Role[];
+  groups?: Group[];
+  __v?: number;
+};
+
 @Component({
   selector: 'app-chat-dashboard',
   templateUrl: './chat-dashboard.component.html',
   styleUrls: ['./chat-dashboard.component.css']
 })
+
 export class ChatDashboardComponent {
   title = 'Chatscord';
   socket: Socket;
@@ -15,20 +46,13 @@ export class ChatDashboardComponent {
   rooms: string[] = [];
   groups?: { name: string }[]
   currentRoom = '';
-  currentUser: { 
-    username: string,
-    email?: string,
-    roles?: { name: string, permissions: string[] }[],
-    groups?: { name: string }[]
-  } = { username: 'Anonymous' };
+  currentUser: User = { _id: '', username: 'Anonymous' };
 
   constructor(private router: Router) {
     this.socket = io('http://localhost:3000');
     this.joinRoom(this.currentRoom);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (!this.currentUser.username) {
-      this.currentUser = { username: 'Anonymous' };
-    } else {
+    if (this.currentUser.username) {
       this.updateRoomsBasedOnUser();
       // set current room to first room in list
       if (this.rooms.length > 0) {
@@ -53,19 +77,20 @@ export class ChatDashboardComponent {
   }
 
   updateRoomsBasedOnUser() {
+    this.rooms = [];
     if (this.currentUser && this.currentUser.groups) {
-        this.rooms = this.currentUser.groups.map(group => group.name);
-        // create messages object for each room
-        this.rooms.forEach(room => {
-          if (!this.messages[room]) {
-            this.messages[room] = [];
-          }
+        this.currentUser.groups.forEach(group => {
+            if (group.channels) {
+                group.channels.forEach(channel => {
+                    this.rooms.push(channel.name);
+                    if (!this.messages[channel.name]) {
+                        this.messages[channel.name] = [];
+                    }
+                });
+            }
         });
-    } else {
-        this.rooms = [];
     }
-  }
-  
+  } 
 
   joinRoom(room: string) {
     if (this.currentRoom) {
@@ -80,14 +105,14 @@ export class ChatDashboardComponent {
   }
 
   sendMessage() {
-    // if (!this.currentUser.username) {
-    //   alert('You must be logged in to send messages.');
-    //   return;
-    // }
-    // if (!this.currentRoom) {
-    //   alert('You must be in a room to send messages.');
-    //   return;
-    // }
+    if (!this.currentUser.username) {
+      alert('You must be logged in to send messages.');
+      return;
+    }
+    if (!this.currentRoom) {
+      alert('You must be in a room to send messages.');
+      return;
+    }
     if (this.newMessage.trim()) {
       this.socket.emit('sendMessage', {
         content: this.newMessage,
@@ -97,20 +122,8 @@ export class ChatDashboardComponent {
     }
   }
 
-  openUserSettings() {
-    // Logic to open user settings
-  }
-  
-  manageGroups() {
-    // Logic to manage groups
-  }
-  
-  manageRoomUsers() {
-    // Logic to manage room users
-  }
-  
-  manageGroupAdmins() {
-    // Logic to manage group admins
+  gotoVideoRoom(): void {
+    window.open(this.router.createUrlTree(['/video-room', this.currentRoom]).toString(), '_blank');
   }
 
   logout() {
@@ -124,4 +137,5 @@ export class ChatDashboardComponent {
       this.messages[this.currentRoom].push(message);
     });
   }
+
 }

@@ -16,9 +16,15 @@
         </div>
 
         <!-- Create Channels -->
-        <div class="module-card" onclick="createChannelFunction()">
+        <div class="module-card" (click)="openCreateChannelModal()">
             <i class="fas fa-hashtag"></i>
             <h3>Create Channel</h3>
+        </div>
+
+        <!-- Assign User to Group -->
+        <div class="module-card" (click)="openAssignUserToGroupModal()">
+            <i class="fas fa-user-plus"></i>
+            <h3>Assign User to Group</h3>
         </div>
 
         <!-- Remove Entities -->
@@ -63,6 +69,55 @@
             </div>
         </div>
     </div>
+
+    <!-- Channel Creation Modal -->
+    <div id="createChannelModal" class="modal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h2>Create Channel</h2>
+                <form (submit)="onCreateChannel()">
+                    <div class="input-group">
+                        <label for="channelName">Channel Name</label>
+                        <input type="text" name="channelName" id="channelName" [(ngModel)]="newChannelName">
+                    </div>
+                    <div class="input-group">
+                        <label for="group">Select Group</label>
+                        <select name="group" id="group" [(ngModel)]="selectedGroupId">
+                            <option *ngFor="let group of groups" [value]="group._id">{{ group.name }}</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="modal-btn">Create</button>
+                </form>
+                <button (click)="closeCreateChannelModal()" class="modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign User to Group Modal -->
+    <div id="assignUserToGroupModal" class="modal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h2>Assign User to Group</h2>
+                <form (submit)="onAssignUserToGroup()">
+                    <div class="input-group">
+                        <label for="user">Select User</label>
+                        <select name="user" id="user" [(ngModel)]="selectedUserId">
+                            <option *ngFor="let user of users" [value]="user._id">{{ user.username }}</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="group">Select Group</label>
+                        <select name="group" id="group" [(ngModel)]="selectedGroupIdForAssignment">
+                            <option *ngFor="let group of groups" [value]="group._id">{{ group.name }}</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="modal-btn">Assign</button>
+                </form>
+                <button (click)="closeAssignUserToGroupModal()" class="modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <style>

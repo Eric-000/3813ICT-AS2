@@ -40,6 +40,7 @@
       <div class="input-area">
           <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" placeholder="Type your message...">
           <button (click)="sendMessage()">Send</button>
+          <button *ngIf="currentRoom" (click)="gotoVideoRoom()" target="_blank">Join Video Room</button>
       </div>
   </div>
 </div>

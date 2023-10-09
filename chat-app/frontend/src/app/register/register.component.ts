@@ -24,7 +24,7 @@ export class RegisterComponent {
     }
   
     try {
-      const response = await axios.post('http://127.0.0.1:3000/users/register', {
+      const response = await axios.post('http://localhost:3000/users/register', {
         username: this.username,
         password: this.password,
         email: this.email

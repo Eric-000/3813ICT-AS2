@@ -16,7 +16,7 @@ export class LoginComponent {
 
   async login() {
     try {
-      const response = await axios.post('http://127.0.0.1:3000/users/login', {
+      const response = await axios.post('http://localhost:3000/users/login', {
         username: this.username,
         password: this.password
       });

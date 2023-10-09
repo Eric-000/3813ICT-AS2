@@ -20,6 +20,8 @@ const checkPermissions = (requiredRole) => {
       // check if user has the required role
       const roles = user.roles.map(role => role.name);
       if (roles.includes(requiredRole)) {
+        // add user to request
+        req.user = user;
         next();  // pass the middleware
       } else {
         return res.status(403).send('Forbidden: You do not have permission.');
