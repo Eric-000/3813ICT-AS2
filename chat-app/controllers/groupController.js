@@ -27,6 +27,27 @@ const getGroups = async (req, res) => {
   }
 };
 
+const getGroupAdminGroups = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const groups = await Group.find({ createdBy: userId }).populate('channels');
+    res.status(200).send(groups);
+  } catch (error) {
+    console.error('Error fetching groups:', error);
+    res.status(500).send('Server error');
+  }
+}
+
+const getSuperAdminGroups = async (req, res) => {
+  try {
+    const groups = await Group.find().populate('channels');
+    res.status(200).send(groups);
+  } catch (error) {
+    console.error('Error fetching groups:', error);
+    res.status(500).send('Server error');
+  }
+}
+
 const assignGroup = async (req, res) => {
   const { userId, groupId } = req.body;
 
@@ -123,5 +144,7 @@ module.exports = {
   assignGroup,
   getGroups,
   removeUserFromGroup,
-  deleteGroup
+  deleteGroup,
+  getGroupAdminGroups,
+  getSuperAdminGroups
 };

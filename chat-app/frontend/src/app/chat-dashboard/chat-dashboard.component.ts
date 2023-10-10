@@ -71,6 +71,7 @@ export class ChatDashboardComponent {
     return false;
   }
 
+
   hasRole(targetRole: string): boolean {
     if (this.currentUser && this.currentUser.roles) {
       return this.currentUser.roles.some(role => role.name === targetRole);
@@ -78,21 +79,32 @@ export class ChatDashboardComponent {
     return false;
   }
 
-  updateRoomsBasedOnUser() {
+  async updateRoomsBasedOnUser() {
     this.rooms = [];
-    if (this.currentUser && this.currentUser.groups) {
-        this.currentUser.groups.forEach(group => {
-            if (group.channels) {
-                group.channels.forEach(channel => {
-                    this.rooms.push(channel.name);
-                    if (!this.messages[channel.name]) {
-                        this.messages[channel.name] = [];
-                    }
-                });
-            }
-        });
+    
+    let groups = [];
+
+    if (this.hasRole('Super Admin')) {
+        groups = await this.getGroupsBySuperAdmin();
+    } else if (this.hasRole('Group Admin')) {
+        groups = await this.getGroupsByGroupAdmin();
+    } else if (this.currentUser && this.currentUser.groups) {
+        groups = this.currentUser.groups;
     }
-  } 
+
+    console.log('groups', groups);
+
+    groups.forEach((group: any) => {
+        if (group.channels) {
+            group.channels.forEach((channel: any) => {
+                this.rooms.push(channel.name);
+                if (!this.messages[channel.name]) {
+                    this.messages[channel.name] = [];
+                }
+            });
+        }
+    });
+  }
 
   joinRoom(room: string) {
     if (this.currentRoom) {
@@ -208,6 +220,38 @@ export class ChatDashboardComponent {
         sender: this.currentUser.username,
         avatar: this.currentUser.profileImage ? 'http://localhost:3000/' + this.currentUser.profileImage : '' 
     }, this.currentRoom);
+  }
+
+  async getGroupsByGroupAdmin() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/groups/group-admin/all', {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error fetching all groups:', error.response?.data);
+      alert('Error fetching all groups. Please try again.');
+      return [];
+    }
+  }
+  
+  async getGroupsBySuperAdmin() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/groups/super-admin/all', {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error fetching groups by admin:', error.response?.data);
+      alert('Error fetching groups by admin. Please try again.');
+      return [];
+    }
   }
 
 }
