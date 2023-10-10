@@ -21,6 +21,14 @@ export class GroupAdminDashboardComponent {
   // create channel states
   newGroupName = '';
 
+  // remove user from group states
+  selectedUserIdForRemoval: string = '';
+  selectedGroupIdForRemoval: string = '';
+
+  // delete group states
+  selectedGroupIdForDeletion: string = '';
+
+
   createGroupFunction(): void {
     const modal = document.getElementById('createGroupModal');
     if (modal) {
@@ -188,4 +196,129 @@ export class GroupAdminDashboardComponent {
         alert('Error assigning user to group. Please try again.');
     }
   }
+
+  // Remove user from group functions
+  async openRemoveUserFromGroupModal() {
+    try {
+        const token = localStorage.getItem('token');
+  
+        // Fetch all users with role 'User' (or all users, based on your need)
+        const usersResponse = await axios.get('http://localhost:3000/users/all', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+  
+        const response = await axios.get('http://localhost:3000/groups/all', {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        this.groups = response.data;
+        this.users = usersResponse.data;
+  
+        // Open the modal
+        const modal = document.getElementById('removeUserFromGroupModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    } catch (error: any) {
+        console.error('Error fetching users:', error.response?.data);
+        alert('Error fetching users. Please try again.');
+    }
+  }
+  
+  closeRemoveUserFromGroupModal(): void {
+      const modal = document.getElementById('removeUserFromGroupModal');
+      if (modal) {
+          modal.style.display = 'none';
+      }
+      this.selectedUserIdForRemoval = '';
+      this.selectedGroupIdForRemoval = '';
+  }
+
+  async onRemoveUserFromGroup() {
+    if (this.selectedGroupIdForRemoval && this.selectedUserIdForRemoval) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post('http://localhost:3000/groups/leave', 
+        {
+          userId: this.selectedUserIdForRemoval,
+          groupId: this.selectedGroupIdForRemoval
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+      );
+      alert('Successfully left the group!');
+      this.closeRemoveUserFromGroupModal();
+  
+      } catch (error) {
+        alert('Error leaving the group.');
+      }
+    } else {
+      alert('Please select a group to leave.');
+    }
+  }
+
+  // delete group functions
+  async onDeleteGroup() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:3000/groups/delete', 
+        {
+          groupId: this.selectedGroupIdForDeletion
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+  
+      if (response.data && response.data.success) {
+        alert('Group deleted successfully!');
+        this.closeDeleteGroupModal();
+      } else {
+        alert('Error deleting group. Please try again.');
+      }
+    } catch (error: any) {
+      console.error('Error deleting group:', error.response?.data);
+      alert('Error deleting group. Please try again.');
+    }
+  }
+  
+  async openDeleteGroupModal() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/groups/all', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      this.groups = response.data;
+  
+      const modal = document.getElementById('deleteGroupModal');
+      if (modal) {
+        modal.style.display = 'block';
+      }
+    } catch (error: any) {
+      console.error('Error fetching groups:', error.response?.data);
+      alert('Error fetching groups. Please try again.');
+    }
+  }
+  
+  
+  closeDeleteGroupModal() {
+    const modal = document.getElementById('deleteGroupModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+    this.selectedGroupIdForDeletion = '';
+  }
+  
 }

@@ -57,9 +57,71 @@ const assignGroup = async (req, res) => {
   }
 };
 
+const removeUserFromGroup = async (req, res) => {
+  const { userId, groupId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).send('User not found.');
+    }
+
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(400).send('Group not found.');
+    }
+
+    const groupIndex = user.groups.indexOf(group._id);
+    if (groupIndex > -1) {
+      user.groups.splice(groupIndex, 1);
+      await user.save();
+    } else {
+      return res.status(400).send('User is not a member of the specified group.');
+    }
+
+    res.status(200).send({ success: true });
+
+  } catch (error) {
+    console.error('Error removing user from group:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+const deleteGroup = async (req, res) => {
+  const { groupId } = req.body;
+  const userId = req.user._id;
+
+  try {
+    // Check if the group exists
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(400).send('Group not found.');
+    }
+
+    if (group.createdBy.toString() !== userId.toString()) {
+      return res.status(403).send('You do not have permission to delete this group.');
+    }
+
+    // Remove the group
+    await Group.findByIdAndRemove(groupId);
+
+    // Remove this group reference from all users
+    await User.updateMany({}, { $pull: { groups: groupId } });
+
+    res.status(200).send({ success: true, message: 'Group deleted successfully.' });
+
+  } catch (error) {
+    console.error('Error deleting group:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 module.exports = {
   createGroup,
   assignGroup,
-  getGroups
+  getGroups,
+  removeUserFromGroup,
+  deleteGroup
 };

@@ -6,6 +6,10 @@ const addListeners = (io, socket) => {
         socket.join(group);
     });
 
+    socket.on('sendImage', (base64Image, group) => {
+        io.to(group).emit('receiveImage', base64Image);
+    });
+
     socket.on('sendMessage', (message, group) => {
         io.to(group).emit('newMessage', message);
     });

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Router } from '@angular/router';
+import axios from 'axios';
 
 type Channel = {
   _id: string;
@@ -29,6 +30,7 @@ type User = {
   email?: string;
   roles?: Role[];
   groups?: Group[];
+  profileImage?: string;
   __v?: number;
 };
 
@@ -41,7 +43,7 @@ type User = {
 export class ChatDashboardComponent {
   title = 'Chatscord';
   socket: Socket;
-  messages: { [key: string]: { sender: string, content: string }[] } = {};
+  messages: { [key: string]: { sender: string, content: string, avatar: string }[] } = {};
   newMessage = '';
   rooms: string[] = [];
   groups?: { name: string }[]
@@ -116,7 +118,8 @@ export class ChatDashboardComponent {
     if (this.newMessage.trim()) {
       this.socket.emit('sendMessage', {
         content: this.newMessage,
-        sender: this.currentUser.username
+        sender: this.currentUser.username,
+        avatar: this.currentUser.profileImage ? 'http://localhost:3000/' + this.currentUser.profileImage : '' 
       }, this.currentRoom);
       this.newMessage = '';
     }
@@ -133,9 +136,78 @@ export class ChatDashboardComponent {
   }
 
   ngOnInit() {
-    this.socket.on('newMessage', (message: { sender: string, content: string }) => {
+    this.socket.on('newMessage', (message: { sender: string, content: string, avatar: string }) => {
       this.messages[this.currentRoom].push(message);
     });
+
+    this.socket.on('receiveImage', (data: {image: string, sender: string, avatar: string}) => {
+      this.messages[this.currentRoom].push({
+        sender: data.sender,
+        content: `<img src="${data.image}" alt="Chat Image" style="max-width: 100%; height: auto;">`,
+        avatar: data.avatar
+      });
+    });
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+  
+    if (file) {
+      this.uploadFile(file);
+    }
+  }
+  
+  async uploadFile(file: File) {
+    const uploadData = new FormData();
+    uploadData.append('profileImage', file, file.name);
+  
+    try {
+      const response = await axios.post('http://localhost:3000/users/uploadProfileImage', uploadData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+  
+      this.currentUser.profileImage = response.data.imagePath;
+      
+      // Update localStorage
+      localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+  
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  }
+
+  // attach chat image
+  onImageSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            const base64Image = e.target.result;
+            this.sendImage(base64Image);
+        };
+        reader.readAsDataURL(file);
+    }
+  }
+
+  // send chat image
+  sendImage(base64Image: string) {
+    if (!this.currentUser.username) {
+        alert('You must be logged in to send images.');
+        return;
+    }
+    if (!this.currentRoom) {
+        alert('You must be in a room to send images.');
+        return;
+    }
+    console.log('sending image', base64Image);
+    this.socket.emit('sendImage', {
+        image: base64Image,
+        sender: this.currentUser.username,
+        avatar: this.currentUser.profileImage ? 'http://localhost:3000/' + this.currentUser.profileImage : '' 
+    }, this.currentRoom);
   }
 
 }

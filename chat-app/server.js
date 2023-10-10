@@ -8,9 +8,24 @@ const channelRoutes = require('./routes/channelRoutes');
 const http = require('http');
 const configureSocket = require('./socket');
 const { ExpressPeerServer } = require('peer');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// multer configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 mongoose.connect('mongodb://127.0.0.1:27017/myDatabase', {
   useNewUrlParser: true,

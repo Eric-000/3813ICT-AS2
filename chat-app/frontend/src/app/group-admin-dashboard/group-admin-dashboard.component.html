@@ -1,6 +1,6 @@
 <div class="dashboard-wrapper">
     <h1 class="white">
-        Welcome to the Super Group Dashboard!
+        Welcome to the Group Admin Dashboard!
     </h1>
     <div class="modules-wrapper">
         <!-- Return to Chat Room -->
@@ -28,28 +28,15 @@
         </div>
 
         <!-- Remove Entities -->
-        <div class="module-card" onclick="removeEntitiesFunction()">
+        <div class="module-card" (click)="openRemoveUserFromGroupModal()">
             <i class="fas fa-minus-circle"></i>
-            <h3>Remove Group/Channel/User</h3>
-        </div>
-
-        <!-- Delete Chat User -->
-        <div class="module-card" onclick="deleteChatUserFunction()">
-            <i class="fas fa-user-times"></i>
-            <h3>Delete Chat User</h3>
+            <h3>Remove User From Group</h3>
         </div>
 
         <!-- Modify/Delete Group -->
-        <div class="module-card" onclick="modifyDeleteGroupFunction()">
+        <div class="module-card" (click)="openDeleteGroupModal()">
             <i class="fas fa-tools"></i>
-            <h3>Modify/Delete Created Group</h3>
-        </div>
-
-        <!-- Ban and Report -->
-        <div class="module-card" onclick="banReportFunction()">
-            <i class="fas fa-ban"></i>
-            <h3>Ban & Report</h3>
-            <p>Ban a user and report to super admins.</p>
+            <h3>Delete Group</h3>
         </div>
 
         <!-- Group Creation Modal -->
@@ -118,5 +105,48 @@
         </div>
     </div>
 
+    <!-- Remove User from Group Modal -->
+    <div id="removeUserFromGroupModal" class="modal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h2>Remove User from Group</h2>
+                <form (submit)="onRemoveUserFromGroup()">
+                    <div class="input-group">
+                        <label for="userRemoval">Select User</label>
+                        <select name="userRemoval" id="userRemoval" [(ngModel)]="selectedUserIdForRemoval">
+                            <option *ngFor="let user of users" [value]="user._id">{{ user.username }}</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="groupRemoval">Select Group</label>
+                        <select name="groupRemoval" id="groupRemoval" [(ngModel)]="selectedGroupIdForRemoval">
+                            <option *ngFor="let group of groups" [value]="group._id">{{ group.name }}</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="modal-btn">Remove</button>
+                </form>
+                <button (click)="closeRemoveUserFromGroupModal()" class="modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Group Modal -->
+    <div id="deleteGroupModal" class="modal">
+        <div class="modal-container">
+        <div class="modal-content">
+            <h2>Delete Group</h2>
+            <form (submit)="onDeleteGroup()">
+            <div class="input-group">
+                <label for="groupDeletion">Select Group to Delete</label>
+                <select name="groupDeletion" id="groupDeletion" [(ngModel)]="selectedGroupIdForDeletion">
+                <option *ngFor="let group of groups" [value]="group._id">{{ group.name }}</option>
+                </select>
+            </div>
+            <button type="submit" class="modal-btn">Delete</button>
+            </form>
+            <button (click)="closeDeleteGroupModal()" class="modal-btn">Cancel</button>
+        </div>
+        </div>
+    </div>
 </div>
 

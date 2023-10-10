@@ -10,18 +10,29 @@
         </div>
         
         <!-- Delete Account -->
-        <div class="module-card">
+        <div class="module-card" (click)="deleteAccount()">
             <i class="fas fa-user-times"></i>
             <h3>Delete Account</h3>
             <p>Remove yourself from the chat platform.</p>
         </div>
 
-        <!-- Leave Group(s) -->
-        <div class="module-card">
+        <!-- Leave Group -->
+        <div class="module-card" (click)="openLeaveGroupModal()">
             <i class="fas fa-sign-out-alt"></i>
             <h3>Leave Group(s)</h3>
             <p>Exit from a group or groups you belong to.</p>
         </div>
+
+        <!-- Leave Group Modal -->
+        <div *ngIf="showLeaveGroupModal" class="modal">
+            <div class="modal-content">
+              <span class="close" (click)="closeLeaveGroupModal()">&times;</span>
+              <h2>Select a group to leave</h2>
+              <select [(ngModel)]="selectedGroup">
+                <option *ngFor="let group of userGroups" [value]="group._id">{{group.name}}</option>
+              </select>
+              <button (click)="leaveGroup()">Leave Group</button>
+            </div>
+          </div>
     </div>
 </div>
-

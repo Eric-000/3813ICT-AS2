@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
-const checkPermissions = (requiredRole) => {
+const checkPermissions = (requiredRole = null) => {
   return async (req, res, next) => {
     try {
       // check token
@@ -17,14 +17,19 @@ const checkPermissions = (requiredRole) => {
         return res.status(401).send('Authentication failed.');
       }
 
-      // check if user has the required role
-      const roles = user.roles.map(role => role.name);
-      if (roles.includes(requiredRole)) {
-        // add user to request
-        req.user = user;
-        next();  // pass the middleware
+      if (requiredRole) {
+        // check if user has the required role
+        const roles = user.roles.map(role => role.name);
+        console.log(roles);
+        if (roles.includes(requiredRole) || roles.includes('Super Admin')) {
+          req.user = user;
+          next();
+        } else {
+          return res.status(403).send('Forbidden: You do not have permission.');
+        }
       } else {
-        return res.status(403).send('Forbidden: You do not have permission.');
+        req.user = user;
+        next();
       }
 
     } catch (error) {

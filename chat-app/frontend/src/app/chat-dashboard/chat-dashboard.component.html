@@ -21,10 +21,13 @@
     
         <!-- Dropdown button -->
         <div class="dropdown">
+          <img *ngIf="currentUser.profileImage" [src]="'http://localhost:3000/' + currentUser.profileImage" alt="User Avatar" class="avatar">
+          <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none;">
           <button><i class="fas fa-cog"></i></button>
           <!-- Dropdown content -->
           <div class="dropdown-content">
               <a (click)="logout()">Logout</a>
+              <a (click)="fileInput.click()">Upload Avatar</a>
               <a *ngIf="hasRole('User')" routerLink="/user">User Dashboard</a>
               <a *ngIf="hasRole('Super Admin')" routerLink="/superAdmin">Super Admin Dashboard</a>
               <a *ngIf="hasRole('Group Admin')" routerLink="/groupAdmin">Group Admin Dashboard</a>
@@ -32,14 +35,19 @@
         </div>
       </div>
       <div class="messages">
-          <div *ngFor="let message of messages[currentRoom]" class="message-wrapper">
+        <div *ngFor="let message of messages[currentRoom]" class="message-wrapper">
+          <div style="display: flex; align-items: center;">
+            <img *ngIf="message.avatar" [src]="message.avatar" alt="Sender Avatar" class="sender-avatar">
             <div class="message-sender">{{ message.sender }}:</div>
-            <div class="bubble">{{ message.content }}</div>
           </div>
+          <div class="bubble" [innerHTML]="message.content"></div>
+        </div>
       </div>
       <div class="input-area">
           <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" placeholder="Type your message...">
           <button (click)="sendMessage()">Send</button>
+          <input type="file" (change)="onImageSelected($event)" #imageInput style="display: none;">
+          <button (click)="imageInput.click()">Attach Image</button>
           <button *ngIf="currentRoom" (click)="gotoVideoRoom()" target="_blank">Join Video Room</button>
       </div>
   </div>

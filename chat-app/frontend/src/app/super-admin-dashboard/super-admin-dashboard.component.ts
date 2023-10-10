@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import axios from 'axios';
 
 @Component({
   selector: 'app-super-admin-dashboard',
@@ -9,27 +10,59 @@ export class SuperAdminDashboardComponent {
 
   constructor() { }
 
-  createGroup() {
-    console.log("Create Group")
+  users: any[] = [];
+  selectedUserId: string = '';
+  selectedRole: string = '';
+
+  ngOnInit() {
+    this.fetchUsers();
   }
 
-  createChannel() {
-    console.log("Create Group Admin")
+  async fetchUsers() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/users/all', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      this.users = response.data;
+    } catch (error: any) {
+      console.error('Error fetching users:', error.response?.data);
+    }
   }
 
-  removeEntities() {
-    console.log("Create Super Admin")
+  async promoteUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:3000/users/assign-role', 
+      {
+        userId: this.selectedUserId,
+        roleName: this.selectedRole
+      },
+      {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+      alert('User promoted successfully!');
+    } catch (error: any) {
+      console.error('Error promoting user:', error.response?.data);
+      alert('Error promoting user. Please try again.');
+    }
   }
 
-  deleteChatUser() {
-    console.log("Create Chat")
+  openPromoteUserModal() {
+    const modal = document.getElementById('promoteUserModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
   }
-
-  modifyDeleteGroup() {
-    console.log("Create Message")
-  }
-
-  banAndReport() {
-    console.log("Create Message Group")
+  
+  closePromoteUserModal() {
+    const modal = document.getElementById('promoteUserModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
   }
 }

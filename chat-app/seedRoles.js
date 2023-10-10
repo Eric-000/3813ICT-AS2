@@ -23,11 +23,11 @@ const seedRoles = async () => {
     permissions: [
       'create_groups',
       'create_channels',
+      'assign_user_to_channels',
       'remove_groups_channels_users',
       'delete_chat_users',
       'modify_delete_own_group',
       'ban_user_from_channel',
-      'report_to_super_admin'
     ],
   });
 
@@ -35,8 +35,6 @@ const seedRoles = async () => {
     name: 'User',
     permissions: [
       'create_chat_user',
-      'join_any_channel_in_group',
-      'register_interest_in_group',
       'leave_group',
       'delete_self'
     ],

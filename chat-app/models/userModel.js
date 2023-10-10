@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+  profileImage: {
+    type: String,
+    default: null
+  },
   roles: [
     { 
       type: mongoose.Schema.Types.ObjectId, 

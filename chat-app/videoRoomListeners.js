@@ -1,5 +1,4 @@
 module.exports = (io, socket, peerIds) => {
-
     socket.on('join-video-room', (data) => {
       const { peerId, roomId, username } = data;
       socket.join(roomId);
