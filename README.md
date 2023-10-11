@@ -46,6 +46,11 @@ cd frontend
 ng serve
 ```
 
+5. **Backend Test**:
+```
+npm run-script unitTest
+```
+
 ## Database Schema
 
 ### Users Table:
@@ -107,3 +112,7 @@ For local file handling, we've implemented the `multer` package. It assists in s
 ### Image Transmission in Chat
 
 A simple approach was taken for image handling. Due to image rendering requirements, HTML formatting was implemented on the frontend instead of just plain text. When users send an image, the base64 data of the image is transmitted, embedded within an HTML image tag. This is then broadcast via the socket. All users in the channel can receive this base64 data, which, when rendered using HTML on the frontend, displays the image.
+
+### Mocha Chai unit test 
+
+Defines unit tests for the /register and /login routes, including tests for registering new users, logging in with correct credentials, and handling various error cases.

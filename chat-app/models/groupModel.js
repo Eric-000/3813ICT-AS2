@@ -8,7 +8,7 @@ const groupSchema = new mongoose.Schema({
       ref: 'Channel'
     }
   ],
-  created_by: {
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
